@@ -24,7 +24,7 @@ jobs:
     - name: Checkout K8s Repo
       uses: actions/checkout@v4
       with:
-        repository: 'zTig3r/k8s-deployments'
+        repository: 'LunatigTV/k8s-deployments'
         path: 'k8s-deployments'
         token: ${{ secrets.DEPLOYMENT_REPO_PAT }}
     
@@ -36,8 +36,8 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build Docker image
-      run: docker build . --file Dockerfile --tag ghcr.io/ztig3r/${{ inputs.project_name }}:latest
+      run: docker build . --file Dockerfile --tag ghcr.io/LunatigTV/${{ inputs.project_name }}:latest
       
     - name: Push Docker image
       run: |
-        docker push ghcr.io/ztig3r/${{ inputs.project_name }}:latest
+        docker push ghcr.io/LunatigTV/${{ inputs.project_name }}:latest
