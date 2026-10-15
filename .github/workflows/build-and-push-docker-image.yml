@@ -66,5 +66,6 @@ jobs:
           echo "No changes to commit."
         else
           git commit -m "ci(auto-deploy): update ${{ inputs.project_name }} image to ${IMAGE_TAG}"
-          git push
+          # Explicitly pass the PAT token for push authorization
+          git push https://x-access-token:${{ secrets.DEPLOYMENT_REPO_PAT }}@github.com/LunatigTV/k8s-deployments.git HEAD:main
         fi
