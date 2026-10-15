@@ -30,7 +30,9 @@ jobs:
 
     - name: Set Short SHA
       id: vars
-      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      run: |
+        # Extract short SHA directly from github.sha context
+        echo "sha_short=${GITHUB_SHA:~0,7}" >> $GITHUB_OUTPUT
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
@@ -54,10 +56,10 @@ jobs:
         IMAGE_TAG="${{ steps.vars.outputs.sha_short }}"
         DEPLOYMENT_FILE="k8s-deployments/apps/${{ inputs.project_name }}/deployment.yaml"
 
-        # Update the image line in deployment.yaml
+        # Update the image tag in deployment.yaml
         sed -i -E "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" $DEPLOYMENT_FILE
 
-        # Commit and push to k8s-deployments
+        # Commit and push back to k8s-deployments
         cd k8s-deployments
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
